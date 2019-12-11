@@ -1,0 +1,122 @@
+/*TodoList Styles*/
+body {
+    background: linear-gradient(30deg, #a60af2 50%, #7a01cc 50%);;
+    position: relative;
+    color: #fff;
+    font-family: "Ubuntu light";
+    /*height: 100vh*/
+}
+
+.ancestor {
+    width: 45%;
+    position: absolute;
+    top: 25%;
+    left: 28%
+}
+
+.btn-floating {
+    position: fixed;
+    top: 19%;
+    left: 60%;
+}
+
+.main-card {
+    border-radius: 10px;
+    color: #4a4a4a;
+    position: relative;
+}
+
+.card-upper-body {
+    margin-bottom: 0;
+    margin-left: 2rem;
+    padding-top: 20px;
+}
+
+.task-count {
+    margin-left: 10rem;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.month {
+    margin-top: 0;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.modal-header {
+    color: #4a4a4a;
+}
+
+.card-action {
+    margin-top: -25px
+}
+
+.card-upper-title {
+    color: #7a01cc;
+    font-weight: 700;
+    margin-top: 0;
+}
+
+.card-title + .month {
+    font-size: 18px;
+    text-align: left;
+}
+
+.task-row {
+    border-bottom: 1px solid #777;
+    padding: 7px 30px;
+}
+
+/*Post.html styles*/
+.parent-element {
+    position: relative;
+    top: 15rem;
+    left: 42%;
+    background-color: #000;
+    width: 17%;
+    color: #fff;
+    height: 95px;
+    text-align: center;
+    border-radius: 2px;
+}
+
+.alert-btn {
+    position: absolute;
+    top: 35%;
+    width: 40%;
+    height: 50%;
+    color: #000;
+    border-radius: 5px;
+    left: 30%;
+    box-shadow: 0.5px 0.5px #eee;
+}
+
+.link {
+    color: #ffffff;
+    margin-top: 50px;
+}
+
+ul {
+    list-style-type: none;
+    cursor: pointer;
+    margin-top: 10rem;
+    color: #121212;
+    text-align: left;
+}
+
+ul li {
+    margin-bottom: 5px;
+    font-size: 20px;
+    color: #121212;
+}
+
+.add-list {
+    background-color: #eee;
+    width: 9%;
+    height: 51px;
+    text-align: center;
+    border-radius: 7px;
+    margin-left: 36px;
+    border: 1px solid #eee
+}
