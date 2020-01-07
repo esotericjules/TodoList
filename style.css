@@ -40,8 +40,8 @@ body {
 
 .month {
     margin-top: 0;
-    font-size: 17px;
-    font-weight: 600;
+    font-size: 19px;
+    font-weight: 500;
 }
 
 .modal-header {
@@ -56,6 +56,7 @@ body {
     color: #7a01cc;
     font-weight: 700;
     margin-top: 0;
+    margin-bottom: 0;
 }
 
 .card-title + .month {
@@ -64,7 +65,7 @@ body {
 }
 
 .task-row {
-    border-bottom: 1px solid #777;
+    border-bottom: 1px solid rgba(160,160,160,0.2);
     padding: 7px 30px;
 }
 
@@ -127,3 +128,5 @@ ul li {
 .delete {
     margin-top: 15px
 }
+
+/**/

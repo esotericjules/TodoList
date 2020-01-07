@@ -13,8 +13,15 @@ const date = document.querySelector(".datepicker");
 const time= document.querySelector('.timepicker');
 const checkbox = document.querySelector(".checkbox");
 const taskCount = document.querySelector(".task-count");
+const day = document.querySelector(".day");
+const month = document.querySelector(".month")
 
 let counter = 0;
+
+day.innerHTML = `${moment().format("dddd")} ${moment().day()}`;
+month.innerHTML = moment().format("MMMM");
+console.log(day)
+console.log(typeof day)
 
 // Load all event listeners
 loadEventListeners();
@@ -121,7 +128,10 @@ function addTask(e) {
 
       if(taskInput.value === '') {
         alert('Add a task');
-      } else {
+      }else if (date.value === ''){
+          alert('Please select a date')
+      }
+      else {
             // Create li element
             const li = document.createElement('li');
             // Add class
@@ -311,6 +321,7 @@ function getTaskFromLocalStorage() {
               createElements(task.task, task.date);
               taskCounter("addition");
       })
+
 }
 
 //delete a task from Local Storage
