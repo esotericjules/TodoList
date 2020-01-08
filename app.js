@@ -32,7 +32,7 @@ function loadEventListeners() {
     form.addEventListener('submit', addTask);
     taskList.addEventListener('click', deleteTodo)
     clearBtn.addEventListener('click', clearCheckboxTasks);
-    filter.addEventListener('keydown', filterTask)
+    filter.addEventListener('keydown', filterCheckboxesTodo)
     checkboxRow.addEventListener("click", cancelTodo);
     checkboxRow.addEventListener("click", deleteCheckboxTodo);
 
@@ -286,6 +286,22 @@ function saveTaskInLocalStorage(task, taskDate) {
     localStorage.setItem("tasks", JSON.stringify(tasksObj))
 }
 
+function filterCheckboxesTodo() {
+    //loop through the an array of tasks
+    //find the item in the array that does not contains the input value
+    //set the display of the elements that does not contain the value to none
+    let filterValue = filter.value.toLowerCase();
+    let tasks = document.querySelectorAll(".task-item");
+
+    tasks.forEach(item => {
+        if (item.innerText.toLowerCase().indexOf(filterValue) !== -1) {
+            item.parentElement.style.display = "block"
+        } else{
+            item.parentElement.style.display = "none"
+        }
+    })
+
+}
 
 //get Local Storage Items to display todo items once the page loads
 function getTaskFromLocalStorage() {
