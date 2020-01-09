@@ -1,18 +1,34 @@
 (function ($) {
     $(function () {
+        const taskInput = document.querySelector('#task');
+        const date = document.querySelector(".datepicker");
+
+
         //get modal trigger
         let openModal = document.querySelector(".open-modal");
 
-        openModal.addEventListener("click", () => {
-            //initialize all modals
-            $('.modal').modal();
-
-            //now you can open modal from code
-            $('#modal1').modal('open');
-
-            //or by click on trigger
-            $('.trigger-modal').modal();
-        });
+        $('.modal').modal({
+                dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                onOpenEnd: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+                },
+                onCloseEnd: function() { // Callback for Modal close
+                    //clear the values in task and date inputs
+                    taskInput.value = "";
+                    date.value = "";
+                }
+            }
+        );
+        //
+        // openModal.addEventListener("click", () => {
+        //     //initialize all modals
+        //     $('.modal').modal();
+        //
+        //     //now you can open modal from code
+        //     $('#modal1').modal('open');
+        //
+        //     //or by click on trigger
+        //     $('.trigger-modal').modal();
+        // });
 
         // //initialize date picker
         //     $('.datepicker').datepicker();

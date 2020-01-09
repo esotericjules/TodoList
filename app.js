@@ -8,20 +8,21 @@ const taskInput = document.querySelector('#task');
 //DOM elements for new implementation
 const documentFragment = document.createDocumentFragment();
 const checkboxRow = document.querySelector(".checkbox-row")
-const addNew = document.querySelector(".add-new");
 const date = document.querySelector(".datepicker");
-const time= document.querySelector('.timepicker');
 const checkbox = document.querySelector(".checkbox");
 const taskCount = document.querySelector(".task-count");
 const day = document.querySelector(".day");
-const month = document.querySelector(".month")
+const month = document.querySelector(".month");
 
 let counter = 0;
 
 day.innerHTML = `${moment().format("dddd")} ${moment().day()}`;
 month.innerHTML = moment().format("MMMM");
-console.log(day)
-console.log(typeof day)
+
+
+//set position of alertify notification
+alertify.set('notifier','position', 'top-right');
+
 
 // Load all event listeners
 loadEventListeners();
@@ -30,7 +31,6 @@ loadEventListeners();
 function loadEventListeners() {
     // Add task event
     form.addEventListener('submit', addTask);
-    taskList.addEventListener('click', deleteTodo)
     clearBtn.addEventListener('click', clearCheckboxTasks);
     filter.addEventListener('keydown', filterCheckboxesTodo)
     checkboxRow.addEventListener("click", cancelTodo);
@@ -42,12 +42,6 @@ function loadEventListeners() {
     // addNew.addEventListener("click", addNewItem)
 }
 
-//get value of datepicker
-date.addEventListener("change", (e) => {
-    console.log(e);
-    console.log(e.target.value)
-    console.log(moment(e.target.value).format('MMM DD'))
-})
 
 //dynamic DOM elements
 function createElements(task, taskDate){
@@ -127,73 +121,46 @@ function addTask(e) {
       e.preventDefault();
 
       if(taskInput.value === '') {
-        alert('Add a task');
+          //use alertify to alert the user of the empty input and date value
+          alertify.alert("Please add a task.");
       }else if (date.value === ''){
-          alert('Please select a date')
+          alertify.alert("Please select a date.")
       }
       else {
-            // Create li element
-            const li = document.createElement('li');
-            // Add class
-            li.className = 'collection-item';
-            // Create text node and append to li
-            li.appendChild(document.createTextNode(taskInput.value));
-            // Create new link element
-            const link = document.createElement('a');
-            // Add class
-            link.className = 'delete-item secondary-content';
-            // Add icon html
-            link.innerHTML = '<i class="fa fa-remove"></i>';
-            // Append the link to li
-            li.appendChild(link);
-
-            // Append li to ul
-            taskList.appendChild(li);
-
-
             //Checkboxes implementation
           createElements(taskInput.value, date.value);
-
-
-
           saveTaskInLocalStorage(taskInput.value, date.value);
 
             // Clear input
             taskInput.value = '';
             date.value = '';
+
+          taskCounter("addition");
+          alertify.success('Task added successfully');
       }
-
-      taskCounter("addition");
-
-}
-
-function deleteTodo(e) {
-    console.log(e.target.parentElement.parentElement)
-      if (e.target.parentElement.classList.contains("delete-item")) {
-          e.target.parentElement.parentElement.remove();
-      }
-    deleteTaskFromLocalStorage(e.target.parentElement.parentElement)
 
 }
 
 function deleteCheckboxTodo(e) {
-        console.log(e.target.parentElement)
+        // console.log(e.target.parentElement)
     if (event.target.parentElement.className === "delete-item") {
         if (e.target.parentElement.classList.contains("delete-item")) {
-            console.log('it contains')
-            e.target.parentElement.parentElement.parentElement.remove();
-            taskCounter("subtraction");
+            // console.log('it contains')
+            //confirm delete todo using alertify
+            alertify.confirm("Are you sure you want to delete the task?",
+                function(){
+                    alertify.success('Task deleted successfully');
+                    e.target.parentElement.parentElement.parentElement.remove();
+                    taskCounter("subtraction");
+                    deleteCheckBoxTaskFromLocalStorage(e.target.parentElement.parentElement.parentElement)
+
+                },
+                function(){
+                    // alertify.error('');
+                });
         }
-        deleteCheckBoxTaskFromLocalStorage(e.target.parentElement.parentElement.parentElement)
 
     }
-
-    // if (event.target.parentElement.firstChild.className === "checkbox") {
-    //     console.log("it is a checkbox")
-    // }
-
-
-
 }
 
 function cancelTodo(e) {
@@ -205,11 +172,11 @@ function cancelTodo(e) {
          let myElementClone = e.target.parentElement.parentElement.parentElement.parentElement.cloneNode(true);
             // console.log(item.firstChild.nextSibling.firstChild.innerHTML)
             if(myElementClone.firstChild.nextSibling.firstChild.innerHTML === item.firstChild.nextSibling.firstChild.innerHTML) {
-               console.log("equal")
+               // console.log("equal")
                 e.target.parentElement.parentElement.parentElement.parentElement.style.display = "none";
                 myElementClone.firstChild.nextSibling.firstChild.style.textDecoration = "line-through";
                 myElementClone.style.display = "block";
-                console.log(checkboxRow.lastChild.firstChild.nextSibling.firstChild.innerHTML);
+                // console.log(checkboxRow.lastChild.firstChild.nextSibling.firstChild.innerHTML);
                 if (checkboxRow.lastChild.firstChild.nextSibling.firstChild.innerHTML !== myElementClone.firstChild.nextSibling.firstChild.innerHTML) {
                     checkboxRow.appendChild(myElementClone)
 
@@ -242,32 +209,12 @@ function cancelTodo(e) {
 
 }
 
-function clearTasks() {
-      while(taskList.firstChild) {
-        taskList.firstChild.remove();
-      }
-      removeAllTasksFromLocalStorage()
-
-}
-
 function clearCheckboxTasks() {
     while(checkboxRow.firstChild) {
         checkboxRow.firstChild.remove();
     }
     removeAllTasksFromLocalStorage()
     taskCounter();
-}
-
-function filterTask() {
-      let filterValue = filter.value.toLowerCase();
-      let listItems = document.querySelectorAll('li');
-      listItems.forEach((item) => {
-            if(item.textContent.toLowerCase().indexOf(filterValue) !== -1) {
-                item.style.display = 'block'
-            } else {
-                item.style.display = "none"
-            }
-      })
 }
 
 //Persist to Local Storage
@@ -315,58 +262,16 @@ function getTaskFromLocalStorage() {
 
       //loop through task array to display available todo items
       tasks.forEach((task) => {
-          // console.log(task)
-              // Create li element
-              const li = document.createElement('li');
-              // Add class
-              li.className = 'collection-item';
-              // Create text node and append to li
-              li.appendChild(document.createTextNode(task.task));
-              // Create new link element
-              const link = document.createElement('a');
-              // Add class
-              link.className = 'delete-item secondary-content';
-              // Add icon html
-              link.innerHTML = '<i class="fa fa-remove"></i>';
-              // Append the link to li
-              li.appendChild(link);
-
-              // Append li to ul
-              taskList.appendChild(li);
-
+             //display tasks in the UI
               createElements(task.task, task.date);
               taskCounter("addition");
       })
 
 }
 
-//delete a task from Local Storage
-function deleteTaskFromLocalStorage(deletedNodeElement) {
-    console.log(deletedNodeElement);
-    console.log(deletedNodeElement.textContent)
-    let tasks;
-
-    if (localStorage.getItem("tasks") === null) {
-        tasks = [];
-    } else {
-        tasks = JSON.parse(localStorage.getItem("tasks"))
-    }
-
-    //loop through tasks array and deleted the item that matches the text
-    //content of the deleted node element
-    tasks.forEach((item, index) => {
-        console.log(item)
-        if (deletedNodeElement.textContent === item) {
-            tasks.splice(index, 1)
-        }
-    });
-
-    localStorage.setItem("tasks", JSON.stringify(tasks))
-}
-
 //delete checkbox task from Local Storage
 function deleteCheckBoxTaskFromLocalStorage(deletedNodeElement) {
-    console.log(deletedNodeElement);
+    // console.log(deletedNodeElement);
     let tasks;
 
     if (localStorage.getItem("tasks") === null) {
@@ -378,7 +283,7 @@ function deleteCheckBoxTaskFromLocalStorage(deletedNodeElement) {
     //loop through tasks array and deleted the item that matches the text
     //content of the deleted node element
     tasks.forEach((item, index) => {
-        console.log(item)
+        // console.log(item)
         if (deletedNodeElement.firstChild.nextSibling.firstChild.textContent === item.task) {
             tasks.splice(index, 1)
         }
