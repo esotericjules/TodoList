@@ -1,9 +1,9 @@
 /*TodoList Styles*/
 body {
-    background: linear-gradient(30deg, #a60af2 50%, #7a01cc 50%);;
+    background: linear-gradient(to left bottom, #7a01cc 60%, #E83385 40%);;
     position: relative;
     color: #fff;
-    font-family: "Ubuntu light";
+    font-family: "Roboto", serif;
     /*height: 100vh*/
 }
 
@@ -16,7 +16,7 @@ body {
 
 .btn-floating {
     position: fixed;
-    top: 19%;
+    top: 20%;
     left: 60%;
 }
 
@@ -24,6 +24,7 @@ body {
     border-radius: 10px;
     color: #4a4a4a;
     position: relative;
+    margin-top: 10%;
 }
 
 .card-upper-body {
@@ -34,14 +35,15 @@ body {
 
 .task-count {
     margin-left: 10rem;
-    font-weight: 600;
-    font-size: 18px;
+    font-weight: 500;
+    font-size: 20px;
+    color: #567;
 }
 
 .month {
     margin-top: 0;
     font-size: 19px;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 .modal-header {
@@ -54,7 +56,7 @@ body {
 
 .card-upper-title {
     color: #7a01cc;
-    font-weight: 700;
+    font-weight: 400;
     margin-top: 0;
     margin-bottom: 0;
 }
@@ -67,6 +69,9 @@ body {
 .task-row {
     border-bottom: 1px solid rgba(160,160,160,0.2);
     padding: 7px 30px;
+    font-size: 18px;
+    color: #777;
+    font-weight: 400;
 }
 
 .datepicker-day-button {
@@ -131,10 +136,18 @@ ul li {
 
 .clear-tasks {
    background-color: #7a01cc;
+    color: #ffffff;
+    padding: 10px 24px 40px 24px;
+    border-radius: 4px;
 }
 
-/*.fa-remove {*/
-    /*color: orangered;*/
-/*}*/
+.clear-tasks:hover {
+    background-color: #8e1dcc;
+    color: #ffffff;
+}
+.fa-trash {
+    margin-right: 5px;
+}
+
 
 /**/
