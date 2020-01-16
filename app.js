@@ -16,7 +16,8 @@ const month = document.querySelector(".month");
 
 let counter = 0;
 
-day.innerHTML = `${moment().format("dddd")} ${moment().day()}`;
+// Display day, date and month
+day.innerHTML = `${moment().format("dddd")} ${moment().format("D")}`;
 month.innerHTML = moment().format("MMMM");
 
 
@@ -100,7 +101,7 @@ function createElements(task, taskDate){
     thirdCol.appendChild(dateElement);
 
 
-    let deleteTag = document.createElement('a')
+    let deleteTag = document.createElement('a');
     deleteTag.className = "delete-item";
     deleteTag.innerHTML = '<i class="fa fa-remove"></i>';
 
@@ -142,10 +143,8 @@ function addTask(e) {
 }
 
 function deleteCheckboxTodo(e) {
-        // console.log(e.target.parentElement)
     if (event.target.parentElement.className === "delete-item") {
         if (e.target.parentElement.classList.contains("delete-item")) {
-            // console.log('it contains')
             //confirm delete todo using alertify
             alertify.confirm("Are you sure you want to delete the task?",
                 function(){
@@ -165,18 +164,19 @@ function deleteCheckboxTodo(e) {
 
 function cancelTodo(e) {
     const allCheckoxes = document.querySelectorAll('.task-row')
-    // console.log(allCheckoxes)
 
     if (e.target.checked === true) {
         allCheckoxes.forEach((item, i) => {
+            //duplicate the checked row, check if it is the same as an item in the checkboxes HTML collection,
+            // hide the target row and display the duplicated row
          let myElementClone = e.target.parentElement.parentElement.parentElement.parentElement.cloneNode(true);
-            // console.log(item.firstChild.nextSibling.firstChild.innerHTML)
             if(myElementClone.firstChild.nextSibling.firstChild.innerHTML === item.firstChild.nextSibling.firstChild.innerHTML) {
-               // console.log("equal")
                 e.target.parentElement.parentElement.parentElement.parentElement.style.display = "none";
                 myElementClone.firstChild.nextSibling.firstChild.style.textDecoration = "line-through";
                 myElementClone.style.display = "block";
-                // console.log(checkboxRow.lastChild.firstChild.nextSibling.firstChild.innerHTML);
+                // check if the last element in the checkboxes HTML collection is
+                // not equal to the the newly duplicated element to avoid adding the
+                // same duplicates to the bottom of the row and append it to the bottom
                 if (checkboxRow.lastChild.firstChild.nextSibling.firstChild.innerHTML !== myElementClone.firstChild.nextSibling.firstChild.innerHTML) {
                     checkboxRow.appendChild(myElementClone)
 
@@ -184,29 +184,40 @@ function cancelTodo(e) {
                     checkboxRow.appendChild(myElementClone)
 
                 }
+                //decrement task count
                 taskCounter("subtraction");
             }
         })
     }
+    // if a canceled element is unchecked, loop through the all the checkboxes rows
+    // to find the one that has a second child that the innerHTML is equal to the innerTML
+    // of the target element's second child, display the matching element and remove the
+    // target element from the rows HTML collection
     if (e.target.checked === false) {
         for (let i = 0; i < allCheckoxes.length; i++) {
             if(e.target.parentElement.parentElement.parentElement.nextSibling.firstChild.innerHTML === allCheckoxes[i].firstChild.nextSibling.firstChild.innerHTML) {
-                // console.log('it is equal');
                 allCheckoxes[i].style.display = "block";
                 allCheckoxes[i].firstChild.firstChild.firstChild.firstChild.checked = false;
-                // console.log(allCheckoxes[i].parentNode);
-                // console.log(e.target.parentElement.parentElement.parentElement.parentElement);
                 e.target.parentElement.parentElement.parentElement.parentElement.parentNode.removeChild( e.target.parentElement.parentElement.parentElement.parentElement);
-                taskCounter("addition");
+                taskCounter("addition"); //increment the task count
                 break;
             }
         }
-        // console.log(allCheckoxes);
         e.target.parentElement.parentElement.parentElement.nextSibling.firstChild.style.textDecoration = "none";
 
     }
 
 
+}
+
+function cancel() {
+    //on check of a task, create a new div and append a duplicate of the checked row to it.
+    // hide the checked row
+    // use a inner HTML of a P element to display the number of the completed
+    // task on top of the new rows.
+    //if a row is clicked in the completed row elements, check if the inner HTML of the second child
+    // matches the inner HTML of the second child element of any checkboxes row, display that row
+    // and remove the duplicate from the completed tasks HTML collection
 }
 
 function clearCheckboxTasks() {

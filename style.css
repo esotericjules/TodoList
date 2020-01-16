@@ -74,6 +74,15 @@ body {
     font-weight: 400;
 }
 
+.datepicker-table td.is-selected {
+    background-color: #E83385;
+}
+
+.datepicker-table td.is-today {
+    background-color: #E83385;
+ }
+
+
 .datepicker-day-button {
     color: #444444;
 }
@@ -89,6 +98,32 @@ body {
     height: 95px;
     text-align: center;
     border-radius: 2px;
+}
+
+.add-task {
+    background-color: #E83385;
+    color: #ffffff;
+    padding: 10px 24px 40px 24px;
+    border-radius: 4px;
+}
+
+.add-task:hover {
+    background-color: #e84080;
+    color: #ffffff;
+    padding: 10px 24px 40px 24px;
+    border-radius: 4px;
+}
+
+.datepicker-date-display {
+    background-color: #E83385;
+}
+
+.datepicker-cancel, .datepicker-done{
+   color: #7a01cc;
+}
+
+.month-next:hover, .month-prev:hover {
+    background-color: #E83385;
 }
 
 .alert-btn {
