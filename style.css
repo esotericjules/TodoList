@@ -184,5 +184,16 @@ ul li {
     margin-right: 5px;
 }
 
+.completed-tasks {
+    display: none;
+}
+
+.completed-task-row {
+    padding: 5px 30px;
+}
+
+.completed-task-count {
+    font-size: 18px;
+}
 
 /**/
