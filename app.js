@@ -19,6 +19,7 @@ const completedTaskCount = document.querySelector(".completed-task-count");
 
 let counter = 0;
 let completedTaskCounter = 0;
+let secondCol;
 
 // Display day, date and month
 day.innerHTML = `${moment().format("dddd")} ${moment().format("D")}`;
@@ -214,38 +215,108 @@ function cancelTodo(e) {
 
 }
 
-function completedTaskElements(completedCount) {
+function completedTaskElements(task, taskDate, completedCount) {
     //completed task info
-    const completedTaskRow = document.createElement("div");
-    completedTaskRow.className = "row completed-task-row";
+    // const completedTaskRow = document.createElement("div");
+    // completedTaskRow.className = "row completed-task-row";
+    //
+    // const arrowIconCol = document.createElement("div");
+    //  arrowIconCol.className = "col s3";
+    //
+    //  const completedTaskCol = document.createElement("div");
+    //  completedTaskCol.className = "col s9";
+    //
+    //  //create child element for arrowIconCol
+    // const anchorElement = document.createElement("a");
+    // anchorElement.className = "arrow-down";
+    // anchorElement.innerHTML = '<i class="fa fa-angle-down fa-2x"></i>';
+    //
+    // //append child elements to arrowIconCol
+    // arrowIconCol.appendChild(anchorElement);
+    //
+    // //create child element for completedTaskCol
+    // const completedTaskCount = document.createElement("p");
+    // completedTaskCount.className = "completed-task-count"
+    // completedTaskCount.innerText = completedCount;
+    //
+    // //append child element to completedTaskCol
+    // completedTaskCol.appendChild(completedTaskCount)
+    //
+    // //append columns to completedTaskRow
+    // completedTaskRow.appendChild(arrowIconCol);
+    // completedTaskRow.appendChild(completedTaskCol);
+    //
+    // documentFragment.appendChild(completedTaskRow);
+    // completedTasks.appendChild(documentFragment);
 
-    const arrowIconCol = document.createElement("div");
-     arrowIconCol.className = "col s3";
+    const taskRow = document.createElement("div");
+    taskRow.className = "row task-row";
 
-     const completedTaskCol = document.createElement("div");
-     completedTaskCol.className = "col s9";
+    //create columns with class names
+    const firstCol = document.createElement("div");
+    firstCol.className = "col s2";
 
-     //create child element for arrowIconCol
-    const anchorElement = document.createElement("a");
-    anchorElement.className = "arrow-down";
-    anchorElement.innerHTML = '<i class="fa fa-angle-down fa-2x"></i>';
+    secondCol = document.createElement("div");
+    secondCol.className = "col s5 task-item";
 
-    //append child elements to arrowIconCol
-    arrowIconCol.appendChild(anchorElement);
+    const thirdCol = document.createElement("div");
+    thirdCol.className = "col s3 time";
 
-    //create child element for completedTaskCol
-    const completedTaskCount = document.createElement("p");
-    completedTaskCount.className = "completed-task-count"
-    completedTaskCount.innerText = completedCount;
+    const fourthCol =  document.createElement('div');
+    fourthCol.className = "col s2 delete ";
 
-    //append child element to completedTaskCol
-    completedTaskCol.appendChild(completedTaskCount)
+    //create child elements for first column
+    let checkboxContainer = document.createElement("p");
+    checkboxContainer.className = "label-container"
 
-    //append columns to completedTaskRow
-    completedTaskRow.appendChild(arrowIconCol);
-    completedTaskRow.appendChild(completedTaskCol);
 
-    documentFragment.appendChild(completedTaskRow);
+    const label = document.createElement("label");
+    const checkbox = document.createElement("input");
+    checkbox.className = "checkbox";
+    checkbox.setAttribute("type", "checkbox")
+    // checkbox.setAttribute("checked", "checked");
+    const span = document.createElement("span");
+    span.innerHTML = " ";
+
+    label.appendChild(checkbox);
+    label.appendChild(span);
+
+    //append children of checkbox container to it
+    checkboxContainer.appendChild(label);
+
+    // append checkbox container to first col
+    firstCol.appendChild(checkboxContainer);
+
+    //create children of second column
+    const taskItem = document.createElement("p");
+    taskItem.className = "item";
+    taskItem.innerHTML = task;
+
+    //append taskItem to second col
+    secondCol.appendChild(taskItem);
+
+    //create children of third col
+    const dateElement = document.createElement("p");
+    dateElement.className = "dateElement";
+    dateElement.innerText = taskDate;
+    //append dateElement to third col
+    thirdCol.appendChild(dateElement);
+
+
+    let deleteTag = document.createElement('a');
+    deleteTag.className = "delete-item";
+    deleteTag.innerHTML = '<i class="fa fa-remove"></i>';
+
+    fourthCol.appendChild(deleteTag);
+
+    //append columns to task row
+    taskRow.appendChild(firstCol);
+    taskRow.appendChild(secondCol);
+    taskRow.appendChild(thirdCol);
+    taskRow.appendChild(fourthCol);
+
+    console.log(taskRow)
+    documentFragment.appendChild(taskRow);
     completedTasks.appendChild(documentFragment);
 
 }
@@ -274,9 +345,15 @@ function cancel(e) {
             taskCounter("subtraction");
             //THIS IS WHERE I STOPPED
         console.log('clone', myElementClone);
-    }
+        let childNodesOfMyElementClone = myElementClone.childNodes;
+        let task = childNodesOfMyElementClone[1].innerText;
+        let taskDate = childNodesOfMyElementClone[2].innerText;
+        console.log('task', task, 'taskDate',taskDate)
+        saveCanceledTaskInLocalStorage(task, taskDate)
+        deleteCheckBoxTaskFromLocalStorage(e.target.parentElement.parentElement.parentElement.parentElement)
+}
 
-    if (completedTaskCounter > 0) {
+        if (completedTaskCounter > 0) {
         completedTasks.style.display = 'block';
     }
 
@@ -288,7 +365,8 @@ function cancel(e) {
 // display the matching element in the checkbox row and remove
 // the element from the completed task row
 function unCheckCompletedTask(e) {
-    const allCheckboxes = document.querySelectorAll('.task-row')
+    const allCheckboxes = document.querySelectorAll('.task-row');
+    console.log('allCheckboxes', allCheckboxes)
 
     if (e.target.checked === false) {
         completedTaskCounter--;
@@ -338,19 +416,19 @@ function saveTaskInLocalStorage(task, taskDate) {
     localStorage.setItem("tasks", JSON.stringify(tasksObj))
 }
 
-function saveCanceledTaskInLocalStorage(canceledTask, canceledTaskDate) {
-    let canceledTaskObj;
+function saveCanceledTaskInLocalStorage(cancelledTask, cancelledTaskDate) {
+    let cancelledTaskObj;
     
     if (localStorage.getItem("cancelledTasks") === null) {
-        canceledTaskObj = [];
+        cancelledTaskObj = [];
     } else {
-        canceledTaskObj = JSON.parse(localStorage.getItem("cancelledTaskObj"))
+        cancelledTaskObj = JSON.parse(localStorage.getItem("cancelledTasks"))
     }
 
-    canceledTaskObj.push({canceledTask: canceledTaskObj, canceledTaskDate: canceledTaskDate})
+    cancelledTaskObj.push({cancelledTask: cancelledTask, cancelledTaskDate: cancelledTaskDate})
     
-    localStorage.setItem("canceledTasks", JSON.stringify(canceledTaskObj))
-};
+    localStorage.setItem("cancelledTasks", JSON.stringify(cancelledTaskObj))
+}
 
 function filterCheckboxesTodo() {
     //loop through the an array of tasks
@@ -372,19 +450,45 @@ function filterCheckboxesTodo() {
 //get Local Storage Items to display todo items once the page loads
 function getTaskFromLocalStorage() {
       let tasks;
-      
-      if (localStorage.getItem("tasks") === null) {
+    let cancelledTaskObj;
+
+    if (localStorage.getItem("cancelledTasks") === null) {
+        cancelledTaskObj = [];
+    } else {
+        cancelledTaskObj = JSON.parse(localStorage.getItem("cancelledTasks"))
+    }
+
+
+    if (localStorage.getItem("tasks") === null) {
           tasks = [];
       } else {
           tasks = JSON.parse(localStorage.getItem("tasks"))
       }
+    console.log({tasks})
 
       //loop through task array to display available todo items
       tasks.forEach((task) => {
              //display tasks in the UI
               createElements(task.task, task.date);
               taskCounter("addition");
-      })
+      });
+
+      console.log({cancelledTaskObj})
+    cancelledTaskObj.forEach((cancelledTask) => {
+        console.log('cancelled')
+        completedTaskCounter = 1
+        completedTaskElements(cancelledTask.cancelledTask, cancelledTask.cancelledTaskDate)
+    })
+    completedTaskCounter = cancelledTaskObj.length;
+    completedTaskCount.innerHTML = `${completedTaskCounter} completed tasks`;
+
+    if (completedTaskCounter > 0) {
+        completedTasks.style.display = 'block';
+
+        secondCol.firstChild.style.textDecoration = "line-through";
+
+    }
+
 
 }
 
